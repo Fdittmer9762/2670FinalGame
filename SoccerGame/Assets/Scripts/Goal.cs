@@ -8,9 +8,12 @@ public class Goal : MonoBehaviour {
     public delegate void GoalScored(string teamName, int points);
     public static GoalScored OnGoalScored;
 
-    void OnTriggerEnter(Collider other) //when the ball enters the goal
+    void OnTriggerEnter() //when the ball enters the goal
     {
-        OnGoalScored(Team, Statics.goalPointValue); //call event to add points, int is points to be added, team is who to add points to
+        Debug.Log("Goal " + Team);
+        if(OnGoalScored != null) {
+            OnGoalScored(Team, Statics.goalPointValue); //call event to add points, int is points to be added, team is who to add points to
+        }
     }
 
 }

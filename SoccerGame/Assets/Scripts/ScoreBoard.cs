@@ -10,13 +10,25 @@ public class ScoreBoard : MonoBehaviour {
         Goal.OnGoalScored += AddPoints;
     }
 
+    private void OnDisable()
+    {
+        Goal.OnGoalScored -= AddPoints;
+    }
+
     private void AddPoints(string team, int points) {
         switch (team) {
             case "Red":
+                RedScore += points;
                 break;
             case "Blue":
+                BlueScore += points;
+                break;
+            default:
+                Debug.Log("Error No Points Added");
                 break;
         }
+        Debug.Log(team + " Scored " + points + " points!");
+        Debug.Log("R: " + RedScore + "vs B: " + BlueScore);
     }
 
 }

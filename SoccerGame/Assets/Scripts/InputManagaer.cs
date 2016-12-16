@@ -9,9 +9,8 @@ public class InputManagaer : MonoBehaviour {
 
 	//INPUT
 	void Update () {
-        Debug.Log("working");
         if (PlayerInput != null) {
-            PlayerInput(Input.GetAxis("Horizontal")*Time.deltaTime, Input.GetAxis("Vertical")* Time.deltaTime);
+            PlayerInput(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         }
     }
 }

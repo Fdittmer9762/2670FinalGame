@@ -16,19 +16,38 @@ public class TeamManager : MonoBehaviour {
     public delegate void SwitchControl(int playerID);
     public static SwitchControl OnSwithcActiveControl;
 
+    public delegate void PassBall(Vector3 ballStartPos, Vector3 ballEndPos); //sends ball positions to move between to the ball Game Object
+    public static PassBall OnBallPassed;
+
     private void OnEnable()
     {
         if(OnSwithcActiveControl != null) {
             OnSwithcActiveControl(controlledPlayer);
-            Debug.Log("not Null");
         }
+        Player.OnButtonComand += OnTarget;
     }
 
     private void OnDisable()
     {
-
+        Player.OnButtonComand -= OnTarget;
     }
 
+    void OnTarget (Vector3 playerPos, string Team){
+        Debug.Log("Team Manager");
+        switch (Team) {
+            case "Red":
+                OnBallPassed(playerPos, redGoal.transform.position);
+                break;
+            case "Blue":
+                OnBallPassed(playerPos, blueGoal.transform.position);
+                break;
+            case "TeamMate":
+                Debug.Log("Passing to Teammate");
+                break;
+        }
+    }
+
+    //AUTO ADD PLAYER / ROSTER FILLING  -----------------**Currently Not Needed**-------------------
     private int OnNewPlayer(string Team, GameObject player) { //decides which team to add the player to
         Debug.Log(Team + "string");
         switch (Team) {

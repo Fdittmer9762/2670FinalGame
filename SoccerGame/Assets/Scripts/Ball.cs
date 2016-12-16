@@ -5,21 +5,23 @@ using UnityEngine;
 public class Ball : MonoBehaviour {
 
     public GameObject ballGO;
+    private bool ballIsPassable = true;
 
     //EVENT SUBS
     private void OnEnable()
     {
-        //takes player and target transform.pos info as vector 3's from the team manager
-        PassBall(Vector3.right* 6, Vector3.left* 3);
+        TeamManager.OnBallPassed += PassBall; //takes player and target transform.pos info as vector 3's from the team manager
     }
 
     private void OnDisable()
     {
-
+        TeamManager.OnBallPassed -= PassBall;
     }
 
     void PassBall(Vector3 startPos, Vector3 endPos) {
+        if (ballIsPassable) {
         StartCoroutine (MoveBall( startPos, endPos, FindTravelTime(startPos,endPos)));
+        }
     }
 
     float FindTravelTime(Vector3 startPos, Vector3 endPos) { //finds the time needed to move the ball at a certain speed between two points
@@ -28,6 +30,7 @@ public class Ball : MonoBehaviour {
     }
 
     IEnumerator MoveBall(Vector3 startPos, Vector3 endPos, float travelTime) {
+        ballIsPassable = false;
         float timeTraveled = 0f;
         float percentTraveled = 0f;
         while (percentTraveled < 1) {
@@ -36,5 +39,6 @@ public class Ball : MonoBehaviour {
             ballGO.transform.position = Vector3.Lerp(startPos, endPos, percentTraveled); //try to replace with Slerp
             yield return null;
         }
+        ballIsPassable = true;
     }
 }

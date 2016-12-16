@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour {
 
     //EVENTS
+
     public delegate int TeamMember(string playerTeam, GameObject playerGO);
     public static TeamMember fillRoster;
 

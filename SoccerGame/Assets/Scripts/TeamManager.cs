@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class TeamManager : MonoBehaviour {
 
-    private GameObject[] RedTeam, BlueTeam;
+    public GameObject[] RedTeam, BlueTeam;
     private int redTeamSize, blueTeamSize;
 
     private void Start()
     {
-        Player.fillRoster += OnNewPlayer;
+        Player.fillRoster += OnNewPlayer; //used for auto filling roster 
     }
 
     private void OnDisable()
@@ -41,5 +41,14 @@ public class TeamManager : MonoBehaviour {
             player.SetActive(false); //deactivate player **may replace with destroy
         }
         return playerCount;
+    }
+
+    //FOR TESTING
+    private void DisplayPlayerPos(GameObject[] team)//TESTS IF ARRAY HOLDS THE PLAYERS POSITIONS
+    {
+        for (int i = 0; i < team.Length; i++)
+        {
+            Debug.Log(team[i].transform.position);
+        }
     }
 }

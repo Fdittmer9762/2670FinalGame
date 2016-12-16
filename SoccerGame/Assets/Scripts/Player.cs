@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
+    //MOVEMENT
     public CharacterController playerCC;//contains the player transform
     Vector3 tempPos;
+
+    //PLAYER STATS
+    [HideInInspector] public string playerTeam;
+    private int playerID;
 
     // EVENT SUBS
     private void OnEnable(){
@@ -18,9 +23,8 @@ public class Player : MonoBehaviour {
     }
 
     void PlayerMovement(float inputH, float inputV) {
-        Debug.Log(inputH + inputV);
-        tempPos.x = inputH * Statics.playerSpeed;
-        tempPos.z = inputV * Statics.playerSpeed;
+        tempPos.x = inputH * Statics.playerSpeed * Time.deltaTime;
+        tempPos.z = inputV * Statics.playerSpeed * Time.deltaTime;
         playerCC.Move(tempPos);
     }
 

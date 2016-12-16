@@ -6,15 +6,24 @@ public class TeamManager : MonoBehaviour {
 
     public GameObject[] RedTeam, BlueTeam;
     private int redTeamSize, blueTeamSize;
+    public int controlledPlayer;
 
-    private void Start()
+    //EVENTS
+    public delegate void SwitchControl(int playerID);
+    public static SwitchControl OnSwithcActiveControl;
+
+    private void OnEnable()
     {
-        Player.fillRoster += OnNewPlayer; //used for auto filling roster 
+        if(OnSwithcActiveControl != null) {
+            OnSwithcActiveControl(controlledPlayer);
+            Debug.Log("not Null");
+        }
+        else { Debug.Log("Null");}
     }
 
     private void OnDisable()
     {
-        Player.fillRoster -= OnNewPlayer;
+
     }
 
     private int OnNewPlayer(string Team, GameObject player) { //decides which team to add the player to

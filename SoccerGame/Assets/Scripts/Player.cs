@@ -4,16 +4,26 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
+    //EVENTS
+    public delegate void TeamMember(string playerTeam, GameObject thisPlayer);
+    public static TeamMember fillRoster;
+
     //MOVEMENT
     public CharacterController playerCC;//contains the player transform
     Vector3 tempPos;
 
     //PLAYER STATS
-    [HideInInspector] public string playerTeam;
+    public GameObject playerGO;
+    public string playerTeam;
     private int playerID;
 
+
     // EVENT SUBS
-    private void OnEnable(){
+    private void OnEnable() { //for setup
+        if (fillRoster != null) { 
+            fillRoster(playerTeam, playerGO); //adds player to the team
+            Debug.Log("Attempting to add");
+        }
         InputManagaer.PlayerInput += PlayerMovement;
     }
 

@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class TeamManager : MonoBehaviour {
 
+    //Team Management
     public GameObject[] RedTeam, BlueTeam;
     private int redTeamSize, blueTeamSize;
     public int controlledPlayer;
+
+    //Passing Ball
+    public GameObject redGoal, blueGoal; //stores the transforms of goals
 
     //EVENTS
     public delegate void SwitchControl(int playerID);
@@ -18,7 +22,6 @@ public class TeamManager : MonoBehaviour {
             OnSwithcActiveControl(controlledPlayer);
             Debug.Log("not Null");
         }
-        else { Debug.Log("Null");}
     }
 
     private void OnDisable()

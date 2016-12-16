@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class TeamManager : MonoBehaviour {
 
-    private List<GameObject> RedTeam, BlueTeam;
+    private GameObject[] RedTeam, BlueTeam;
+    private int redTeamSize, blueTeamSize;
 
     private void Start()
     {
@@ -16,22 +17,29 @@ public class TeamManager : MonoBehaviour {
         Player.fillRoster -= OnNewPlayer;
     }
 
-    private void OnNewPlayer(string Team, GameObject player) { //decides which team to add the player to
+    private int OnNewPlayer(string Team, GameObject player) { //decides which team to add the player to
         Debug.Log(Team + "string");
         switch (Team) {
             case "Red":
-                AddPlayer(RedTeam, player);
-                break;
+                return redTeamSize = AddPlayer(RedTeam, player, redTeamSize);
+                //break;
             case "Blue":
-                AddPlayer(BlueTeam, player);
-                break;
+                return blueTeamSize = AddPlayer(BlueTeam, player, blueTeamSize);
+                //break;
             default:
-                break;
+                return 0;
+                //break;
         }
     }
 
-    private void AddPlayer(List<GameObject> Team, GameObject player) { //adds that player to the list
-        Team.Add(player);
-        Debug.Log(Team + " team now has " + Team.Count + "Players");
+    private int AddPlayer(GameObject[] team, GameObject player, int playerCount) { //adds that player to the list
+        if (team.Length <= playerCount){ //if there is a spot on the roster for the player
+            team[playerCount] = player;// put player on the team
+            playerCount++;
+        }
+        else {
+            player.SetActive(false); //deactivate player **may replace with destroy
+        }
+        return playerCount;
     }
 }

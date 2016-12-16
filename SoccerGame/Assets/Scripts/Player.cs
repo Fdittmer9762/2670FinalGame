@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour {
 
     //EVENTS
-    public delegate void TeamMember(string playerTeam, GameObject thisPlayer);
+    public delegate int TeamMember(string playerTeam, GameObject playerGO);
     public static TeamMember fillRoster;
 
     //MOVEMENT
@@ -13,16 +13,15 @@ public class Player : MonoBehaviour {
     Vector3 tempPos;
 
     //PLAYER STATS
-    public GameObject playerGO;
+    public GameObject playerGO; //holds all the players needed info for later ref
     public string playerTeam;
-    private int playerID;
+    public int playerID;
 
 
     // EVENT SUBS
     private void OnEnable() { //for setup
         if (fillRoster != null) { 
-            fillRoster(playerTeam, playerGO); //adds player to the team
-            Debug.Log("Attempting to add");
+            playerID = fillRoster(playerTeam, playerGO); //adds player to the team, sets player id
         }
         InputManagaer.PlayerInput += PlayerMovement;
     }

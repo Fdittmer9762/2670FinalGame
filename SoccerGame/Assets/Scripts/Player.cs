@@ -58,7 +58,7 @@ public class Player : MonoBehaviour {
     }
 
     void OnButtonPress(string pressedButton) {
-        Debug.Log("Player");
+        //unparent the ball from the player
         switch (pressedButton) {
             case "G":
                 if (OnButtonComand != null) {
@@ -67,7 +67,7 @@ public class Player : MonoBehaviour {
                 break;
             case "F":
                 if (OnButtonComand != null){
-                    OnButtonComand(playerGO.transform.position, "Teammate");
+                    OnButtonComand(playerGO.transform.position, playerTeam + " Teammate");
                 }
                 break;
         }

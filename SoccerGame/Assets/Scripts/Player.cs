@@ -5,6 +5,8 @@ using UnityEngine;
 public class Player : MonoBehaviour {
 
     //EVENTS
+    public delegate void ButtonPress (Vector3 playerPos, string passTarget);
+    public static ButtonPress OnButtonComand;
 
     //MOVEMENT
     private bool agentActive;
@@ -20,30 +22,32 @@ public class Player : MonoBehaviour {
     // EVENT SUBS
     private void OnEnable() { //for setup
         InputManagaer.PlayerInput += PlayerMovement;
+        InputManagaer.KeyPressed += OnButtonPress;
         TeamManager.OnSwithcActiveControl += OnControlSwitch;
     }
 
     private void OnDisable()
     {
         InputManagaer.PlayerInput -= PlayerMovement;
+        InputManagaer.KeyPressed -= OnButtonPress;
         TeamManager.OnSwithcActiveControl -= OnControlSwitch;
     }
 
     void OnControlSwitch(int pID) {
         Debug.Log(playerID == pID);
-        if (playerID == pID){ //may cause issues with C#'s wierd equivelance 
+        if (playerID == pID){
             InputManagaer.PlayerInput += PlayerMovement;
-            //playerAgent.SetActive(false);
+            InputManagaer.KeyPressed += OnButtonPress;
             agentActive = true;
         } else {
             InputManagaer.PlayerInput -= PlayerMovement;
-            //playerAgent.SetActive(true);
+            InputManagaer.KeyPressed -= OnButtonPress;
             agentActive = false;
         }
     }
 
     void PlayerMovement(float inputH, float inputV) {
-        Debug.Log(playerID + " " + agentActive);
+        //Debug.Log(playerID + " " + agentActive);
         tempPos.x = inputH * Statics.playerSpeed * Time.deltaTime;
         tempPos.z = inputV * Statics.playerSpeed * Time.deltaTime;
         if (agentActive == false) {
@@ -51,6 +55,24 @@ public class Player : MonoBehaviour {
         }else {
             playerCC.Move(tempPos);
         }
+    }
+
+    void OnButtonPress(string pressedButton) {
+        //unparent the ball from the player
+        switch (pressedButton) {
+            case "G":
+                if (OnButtonComand != null) {
+                    OnButtonComand(playerGO.transform.position, playerTeam);
+                }
+                break;
+            case "F":
+                if (OnButtonComand != null){
+                    OnButtonComand(playerGO.transform.position, playerTeam + " Teammate");
+                }
+                break;
+        }
+        //pass on players position and team if Q (V3,string)
+        //pass on players position and player ID (V3,string)
     }
 
 }

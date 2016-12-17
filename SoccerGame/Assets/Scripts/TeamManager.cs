@@ -4,28 +4,70 @@ using UnityEngine;
 
 public class TeamManager : MonoBehaviour {
 
+    //Team Management
     public GameObject[] RedTeam, BlueTeam;
     private int redTeamSize, blueTeamSize;
     public int controlledPlayer;
+
+    //Passing Ball
+    public GameObject redGoal, blueGoal;                                                //stores the transforms of goals
 
     //EVENTS
     public delegate void SwitchControl(int playerID);
     public static SwitchControl OnSwithcActiveControl;
 
+    public delegate void PassBall(Vector3 ballStartPos, Vector3 ballEndPos);            //sends ball positions to move between to the ball Game Object
+    public static PassBall OnBallPassed;
+
     private void OnEnable()
     {
         if(OnSwithcActiveControl != null) {
             OnSwithcActiveControl(controlledPlayer);
-            Debug.Log("not Null");
         }
-        else { Debug.Log("Null");}
+        Player.OnButtonComand += OnTarget;                                              //subs to ball passing event series
     }
 
     private void OnDisable()
     {
-
+        Player.OnButtonComand -= OnTarget;                                              //unsubs from ball passing event series
     }
 
+    //BALL PASSING
+    void OnTarget (Vector3 playerPos, string Team){
+        switch (Team) {
+            case "Red":
+                OnBallPassed(playerPos, redGoal.transform.position);
+                break;
+            case "Blue":
+                OnBallPassed(playerPos, blueGoal.transform.position);
+                break;
+            case "Red Teammate":
+                OnBallPassed(playerPos, FindClosestTeammate(RedTeam, playerPos)); 
+                break;
+            case "Blue Teammate":
+                OnBallPassed(playerPos, FindClosestTeammate(BlueTeam, playerPos));
+                break;
+            default:
+                Debug.Log("Something is wrong");
+                break;
+        }
+    }
+
+    private Vector3 FindClosestTeammate(GameObject[] Team, Vector3 playerPos) {
+        GameObject adjTeammate = Team[0];                                               //needed to be assigned first, stores the game
+        float dist;                                                                     //stores current GO distance to avoid mult calls of vector3.distance
+        float shortestDist = 100f;                                                      // float stores the shortest distance
+        for (int i = 0; i < Team.Length; i++) {                                         //iterrates throught the given array of GO
+            dist = Mathf.Abs(Vector3.Distance(playerPos, Team[i].transform.position));  //finds the distance from player pos to ally
+            if (dist != 0 && dist <= shortestDist) {                                    // if they are not in the same place and it is the new shortest
+                shortestDist = dist;
+                adjTeammate = Team[i];                                                  //save GO info as the closest ally
+            }
+        }
+        return adjTeammate.transform.position; 
+    }
+
+    //AUTO ADD PLAYER / ROSTER FILLING  -----------------**Currently Not Needed**-------------------
     private int OnNewPlayer(string Team, GameObject player) { //decides which team to add the player to
         Debug.Log(Team + "string");
         switch (Team) {

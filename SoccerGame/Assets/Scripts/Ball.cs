@@ -11,13 +11,16 @@ public class Ball : MonoBehaviour {
     private void OnEnable()
     {
         TeamManager.OnBallPassed += PassBall;                                               //takes player and target transform.pos info as vector 3's from the team manager
+        Player.onParentChange += ChangeParent;
     }
 
     private void OnDisable()
     {
         TeamManager.OnBallPassed -= PassBall;
+        Player.onParentChange -= ChangeParent;
     }
 
+    //BALL PASSING/MOVEMENT
     void PassBall(Vector3 startPos, Vector3 endPos) {
         if (ballIsPassable) {
         StartCoroutine (MoveBall( startPos, endPos, FindTravelTime(startPos,endPos)));
@@ -40,5 +43,9 @@ public class Ball : MonoBehaviour {
             yield return null;
         }
         ballIsPassable = true;
+    }
+
+    void ChangeParent(GameObject newParent) {
+        ballGO.transform.SetParent(newParent.transform);                                    //sets parent to controlled player
     }
 }

@@ -19,6 +19,7 @@ public class TeamManager : MonoBehaviour {
     public delegate void PassBall(Vector3 ballStartPos, Vector3 ballEndPos);            //sends ball positions to move between to the ball Game Object
     public static PassBall OnBallPassed;
 
+    //EVENT SUBS
     private void OnEnable()
     {
         Player.OnButtonComand += OnTarget;                                              //subs to ball passing event series

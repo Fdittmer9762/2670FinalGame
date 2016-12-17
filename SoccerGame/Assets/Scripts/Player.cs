@@ -8,6 +8,9 @@ public class Player : MonoBehaviour {
     public delegate void ButtonPress (Vector3 playerPos, string passTarget);
     public static ButtonPress OnButtonComand;
 
+    public delegate void ParentBall(GameObject newParent);
+    public static ParentBall onParentChange;
+
     //MOVEMENT
     private bool agentActive;
     public CharacterController playerCC;                                        //contains the player transform
@@ -39,6 +42,10 @@ public class Player : MonoBehaviour {
             InputManagaer.PlayerInput += PlayerMovement;
             InputManagaer.KeyPressed += OnButtonPress;
             agentActive = true;
+            //pass gameobject to ball to parent
+            if (onParentChange != null) {
+                onParentChange(playerGO);
+            }
         } else {
             InputManagaer.PlayerInput -= PlayerMovement;
             InputManagaer.KeyPressed -= OnButtonPress;

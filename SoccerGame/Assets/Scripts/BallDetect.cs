@@ -12,7 +12,6 @@ public class BallDetect : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("ball int");
         if (onInterception != null) {
             onInterception(team, playerID);
         }

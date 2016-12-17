@@ -10,17 +10,17 @@ public class Player : MonoBehaviour {
 
     //MOVEMENT
     private bool agentActive;
-    public CharacterController playerCC;//contains the player transform
+    public CharacterController playerCC;                                        //contains the player transform
     private Vector3 tempPos;
 
     //PLAYER STATS
-    public GameObject playerGO; //holds all the players needed info for later ref
+    public GameObject playerGO;                                                 //holds all the players needed info for later ref
     public string playerTeam;
     public int playerID;
 
 
     // EVENT SUBS
-    private void OnEnable() { //for setup
+    private void OnEnable() {                                                   //for setup
         InputManagaer.PlayerInput += PlayerMovement;
         InputManagaer.KeyPressed += OnButtonPress;
         TeamManager.OnSwithcActiveControl += OnControlSwitch;
@@ -47,7 +47,6 @@ public class Player : MonoBehaviour {
     }
 
     void PlayerMovement(float inputH, float inputV) {
-        //Debug.Log(playerID + " " + agentActive);
         tempPos.x = inputH * Statics.playerSpeed * Time.deltaTime;
         tempPos.z = inputV * Statics.playerSpeed * Time.deltaTime;
         if (agentActive == false) {
@@ -58,7 +57,7 @@ public class Player : MonoBehaviour {
     }
 
     void OnButtonPress(string pressedButton) {
-        //unparent the ball from the player
+        //unparent the ball from the player, somewhere down the line
         switch (pressedButton) {
             case "G":
                 if (OnButtonComand != null) {
@@ -71,8 +70,6 @@ public class Player : MonoBehaviour {
                 }
                 break;
         }
-        //pass on players position and team if Q (V3,string)
-        //pass on players position and player ID (V3,string)
     }
 
 }

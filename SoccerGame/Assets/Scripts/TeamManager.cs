@@ -21,15 +21,14 @@ public class TeamManager : MonoBehaviour {
 
     private void OnEnable()
     {
-        if(OnSwithcActiveControl != null) {
-            OnSwithcActiveControl(controlledPlayer);
-        }
         Player.OnButtonComand += OnTarget;                                              //subs to ball passing event series
+        BallDetect.onInterception += OnBallPosChange;                                   //subs to controll change on interception event
     }
 
     private void OnDisable()
     {
         Player.OnButtonComand -= OnTarget;                                              //unsubs from ball passing event series
+        BallDetect.onInterception -= OnBallPosChange;                                   //unsubs from ball interception event
     }
 
     //BALL PASSING
@@ -56,7 +55,7 @@ public class TeamManager : MonoBehaviour {
     private Vector3 FindClosestTeammate(GameObject[] Team, Vector3 playerPos) {
         GameObject adjTeammate = Team[0];                                               //needed to be assigned first, stores the game
         float dist;                                                                     //stores current GO distance to avoid mult calls of vector3.distance
-        float shortestDist = 100f;                                                      // float stores the shortest distance
+        float shortestDist = 100f;                                                      //float stores the shortest distance
         for (int i = 0; i < Team.Length; i++) {                                         //iterrates throught the given array of GO
             dist = Mathf.Abs(Vector3.Distance(playerPos, Team[i].transform.position));  //finds the distance from player pos to ally
             if (dist != 0 && dist <= shortestDist) {                                    // if they are not in the same place and it is the new shortest
@@ -65,6 +64,14 @@ public class TeamManager : MonoBehaviour {
             }
         }
         return adjTeammate.transform.position; 
+    }
+
+    private void OnBallPosChange(string team, int player) {
+        controlledPlayer = player;                                                      //changes controlled player
+        if (OnSwithcActiveControl != null)
+        {
+            OnSwithcActiveControl(controlledPlayer);                                    //calls event to change controlled player, subs are in the player instances
+        }
     }
 
     //AUTO ADD PLAYER / ROSTER FILLING  -----------------**Currently Not Needed**-------------------

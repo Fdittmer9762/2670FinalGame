@@ -10,7 +10,7 @@ public class Ball : MonoBehaviour {
     //EVENT SUBS
     private void OnEnable()
     {
-        TeamManager.OnBallPassed += PassBall; //takes player and target transform.pos info as vector 3's from the team manager
+        TeamManager.OnBallPassed += PassBall;                                               //takes player and target transform.pos info as vector 3's from the team manager
     }
 
     private void OnDisable()
@@ -24,7 +24,7 @@ public class Ball : MonoBehaviour {
         }
     }
 
-    float FindTravelTime(Vector3 startPos, Vector3 endPos) { //finds the time needed to move the ball at a certain speed between two points
+    float FindTravelTime(Vector3 startPos, Vector3 endPos) {                                //finds the time needed to move the ball at a certain speed between two points
         float dist = Vector3.Distance(startPos, endPos);
         return dist / Statics.ballSpeed;
     }
@@ -36,7 +36,7 @@ public class Ball : MonoBehaviour {
         while (percentTraveled < 1) {
             timeTraveled += Time.deltaTime;
             percentTraveled = timeTraveled / travelTime;
-            ballGO.transform.position = Vector3.Lerp(startPos, endPos, percentTraveled); //try to replace with Slerp
+            ballGO.transform.position = Vector3.Lerp(startPos, endPos, percentTraveled);    //try to replace with Slerp
             yield return null;
         }
         ballIsPassable = true;
